@@ -8,6 +8,8 @@ function MINIMIZED_FRIEND_BUTTON_OPEN_CHECK(frame, msg, argStr, argNum)
     else
         frame:ShowWindow(0); 
     end
+
+    frame:ShowWindow(0); 
 end
 
 function MINIMIZED_FRIEND_BUTTON_CLICK(parent, ctrl)
