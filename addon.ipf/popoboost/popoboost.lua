@@ -502,9 +502,9 @@ function POPOBOOST_PRESS_EVENT_PARTICIPATE(frame)
     end
     local opt = { CompareTextDesc = ClMsg('RellayWantParticipatePoPoBoost') }
     if GET_POPOBOOST_SERVER() ~= 1 then
-        WARNINGMSGBOX_EX_FRAME_OPEN(frame, 'None', 'popoboostparticipate;CantRollbackEventParticipate/POPOBOOST_SUCCESS_EVENT_PARTICIPATE', 0, opt);
+        WARNINGMSGBOX_EX_FRAME_OPEN(frame, 'None', 'popoboostparticipate;CantRollbackEventParticipate#Confirm_English/POPOBOOST_SUCCESS_EVENT_PARTICIPATE', 0, opt);
     else
-        WARNINGMSGBOX_EX_FRAME_OPEN(frame, 'None', 'TOSHeroMapPattern_None;CantRollbackEventParticipate/POPOBOOST_SUCCESS_EVENT_PARTICIPATE', 0, opt);
+        WARNINGMSGBOX_EX_FRAME_OPEN(frame, 'None', 'TOSHeroMapPattern_None;CantRollbackEventParticipate#Confirm_English/POPOBOOST_SUCCESS_EVENT_PARTICIPATE', 0, opt);
     end
 end
 
@@ -727,11 +727,7 @@ end
 function POPOBOOST_GODDESS_ROULETTE(frame,arg)
     ui.CloseFrame('popoboost');
     local frame = ui.GetFrame("goddess_roulette")
-    if config.GetServiceNation() == "PAPAYA" then
-        GODDESS_ROULETTE_OPEN(frame, nil, nil, 5)
-    else
-        GODDESS_ROULETTE_OPEN(frame, nil, nil, 4)
-    end
+    GODDESS_ROULETTE_OPEN(frame, nil, nil, 4)
 end
 
 function POPOBOOST_REWARD_CHANGE_BY_GEARSCORE(frame, ctrl, str, num)
@@ -782,18 +778,19 @@ function GET_POPOBOOST_MINIMIZED_HIGHLIGHT()
     local index = 6
     local gearscore = POPOBOOST_GET_MAX_GEARSCORE(pc);
     for i = 0, index do
-        local rewardClass = POPOBOOSET_GET_PROGRESS_INFORMATION(i);
-        local score = TryGetProp(rewardClass,"RewardScore", 300000);
+        -- local isclear = GET_POPOBOOST_PROGRESS_IS_CLEAR(pc, i)
 
         local ProgressProp = GET_POPOBOOST_PROGRESPROP();
         if ProgressProp == "None" then
             return IsMinimizeHighlight;
         end    
+        local isClear = GET_POPOBOOST_PROGRESS_IS_CLEAR(pc, progress)
+
         local propName = string.format("%s%d",ProgressProp,i)
         local progress = TryGetProp(acc,propName,-2);
         local isPremium = POPOBOOST_IS_PREMIUM();
-        if gearscore >= score then
-            local imageName = string.format("popoboost_gearscore_reach_%d",i);
+        if not isClear then
+            -- local imageName = string.format("popoboost_gearscore_reach_%d",i);
             if progress == 1 and isPremium == true then
                 IsMinimizeHighlight = true;
             elseif progress == -1 then
