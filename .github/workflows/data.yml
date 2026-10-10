@@ -35,7 +35,7 @@ jobs:
           rows = [(changes[i].decode().split(), changes[i+1].decode('utf-8')) for i in range(0, len(changes)-1, 2)]
           shas = [meta[3] for meta, _ in rows if meta[1] != '000000']
           if os.environ.get('GITHUB_ACTIONS') == 'true' and shas:
-              subprocess.run(['git', 'fetch', '--no-tags', '--no-write-fetch-head', 'origin', '--stdin'], input=('\n'.join(sorted(set(shas)))+'\n').encode(), check=True)
+              subprocess.run(['git', '-c', 'fetch.negotiationAlgorithm=noop', 'fetch', '--no-tags', '--no-write-fetch-head', '--recurse-submodules=no', '--filter=blob:none', 'origin', '--stdin'], input=('\n'.join(sorted(set(shas)))+'\n').encode(), check=True)
           sizes = subprocess.check_output(['git', 'cat-file', '--batch-check=%(objectname) %(objecttype) %(objectsize)'], input=('\n'.join(shas)+'\n').encode()).decode().splitlines()
           objects = {sha: (typ, int(size)) for sha, typ, size in (line.split() for line in sizes)}
           counts = {'xml': 0, 'utf8_text': 0, 'legacy_text': 0, 'other_assets': 0, 'deleted': 0, 'workflow': 0}
